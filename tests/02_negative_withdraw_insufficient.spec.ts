@@ -30,7 +30,7 @@ test('Negative: withdraw more than balance shows error', async ({ home, customer
 
   const balance = await accountPage.getBalance();
 
-  await accountPage.withdraw(balance + 1000);
+  await accountPage.withdraw(balance + 2000);
 
   await expect(accountPage.helper.page.locator('.error')).toContainText(/Transaction Failed|Transaction failed|Transaction/);
 });
