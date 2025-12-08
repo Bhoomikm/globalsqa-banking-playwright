@@ -8,6 +8,7 @@ export class AccountPage {
     withdrawTab = 'button[ng-click="withdrawl()"]';
     amountInput = 'input[ng-model="amount"]';
     depositBtn = 'button[type="submit"]';
+    withdrawbtn ='button:has-text("Withdraw")';
     message = '.error';
     balanceLocator = "//div[@class='center' and @ng-hide='noAccount']/strong[2]";
     transactionsBtn = 'button:has-text("Transactions")';
@@ -27,7 +28,7 @@ export class AccountPage {
     async withdraw(amount: number) {
         await this.helper.waitAndClick(this.withdrawTab);
         await this.helper.waitAndType(this.amountInput, String(amount));
-        await this.helper.waitAndClick(this.depositBtn);
+        await this.helper.waitAndClick(this.withdrawbtn);
         // success or insufficient funds show in '.error'
     }
 
