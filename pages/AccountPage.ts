@@ -28,7 +28,7 @@ export class AccountPage {
     async withdraw(amount: number) {
         await this.helper.waitAndClick(this.withdrawTab);
         await this.helper.waitAndType(this.amountInput, String(amount));
-        await this.helper.waitAndClick(this.withdrawbtn);
+        await this.helper.waitAndClick(this.depositBtn);
         // success or insufficient funds show in '.error'
     }
 
