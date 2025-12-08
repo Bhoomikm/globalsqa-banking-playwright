@@ -49,16 +49,16 @@ test('Customer deposit and withdraw flow - verify balance and transactions', asy
   await customerLoginPage.loginAs('Harry Potter');
 
   const initial = await accountPage.getBalance();
-  console.log(initial)
+  // console.log(initial)
 
   await accountPage.deposit(100);
   const afterDeposit = await accountPage.getBalance();
-  console.log(afterDeposit)
+  // console.log(afterDeposit)
   expect(afterDeposit).toBe(initial + 100);
 
   await accountPage.withdraw(50);
   const afterWithdraw = await accountPage.getBalance();
-  console.log(afterWithdraw)
+  // console.log(afterWithdraw)
   // expect(afterWithdraw).toBe(afterDeposit - 50);
 
   await accountPage.goToTransactions();
