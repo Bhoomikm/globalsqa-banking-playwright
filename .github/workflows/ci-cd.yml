@@ -1,6 +1,5 @@
 name: Playwright CI → Deploy report (Pages)
 
-# Run on push to main, PRs to main, or manually
 on:
   push:
     branches: [ "main" ]
@@ -11,7 +10,7 @@ on:
 jobs:
   test-and-deploy:
     runs-on: ubuntu-latest
-    # limit concurrency so only one run deploys at a time (optional)
+
     concurrency:
       group: playwright-ci-cd
       cancel-in-progress: false
@@ -20,7 +19,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # fetch full history so deploy steps have commit metadata
           fetch-depth: 0
 
       - name: Setup Node.js
@@ -35,11 +33,9 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright tests (chromium only) and generate HTML report
-        # ensure playwright.config.ts writes HTML report to 'playwright-report'
-        run: npx playwright test --project=chromium --reporter=list || exit_code=$?; echo "EXIT=$exit_code" && exit $exit_code
+      - name: Run Playwright tests (chromium only)
+        run: npx playwright test --project=chromium
         env:
-          # optional: set CI-friendly env vars
           CI: true
 
       - name: Show local report directory (debug)
@@ -48,24 +44,27 @@ jobs:
           echo "Report contents:"
           ls -la playwright-report || true
 
-      # Only deploy when tests succeed
-      - name: Configure Pages (prepare for upload)
+      # Prepare GitHub Pages
+      - name: Configure Pages
         if: ${{ success() }}
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5
 
+      # Upload report for GitHub Pages
       - name: Upload Playwright HTML report as Pages artifact
         if: ${{ success() }}
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: playwright-report
+          path: playwright-report/
 
+      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         if: ${{ success() }}
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
 
-      - name: Upload Playwright report (artifact) for debugging
+      # Always upload as normal artifact (for debugging)
+      - name: Upload Playwright report (artifact)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
-          path: playwright-report
+          path: playwright-report/
