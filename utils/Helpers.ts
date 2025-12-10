@@ -1,6 +1,4 @@
 import { Page, expect } from '@playwright/test';
-import fs from 'fs';
-import path from 'path';
 export class Helpers {
   page: Page;
   constructor(page: Page) { this.page = page; }
